@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Grade">
+	<resultMap type="com.julyday.test_mybatis.entity.Grade" id="GradeResult">
+		<id column="g_id" jdbcType="INTEGER" property="id" />
+		<result column="gname" jdbcType="VARCHAR" property="gname" />
+		<result column="gdesc" jdbcType="VARCHAR" property="gdesc" />
+		<!-- <collection property="students" resultMap="Student.StudentResult" />-->
+		 <collection property="students" ofType="com.julyday.test_mybatis.entity.Student" column="gid">
+			<id column="id" jdbcType="INTEGER" property="id" />
+			<result column="name" jdbcType="VARCHAR" property="name" />
+			<result column="age" jdbcType="INTEGER" property="age" />
+			<result column="gid" jdbcType="INTEGER" property="gid" />
+		</collection>
+	</resultMap>
+	
+	<select id="find" resultMap="GradeResult">
+		SELECT id as g_id,gname,gdesc FROM grade WHERE id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findAll" parameterType="com.julyday.test_mybatis.entity.Grade" resultMap="GradeResult">
+	    SELECT g.id as g_id,g.gname,g.gdesc,s.id,s.name,s.age,s.gid
+	    FROM Grade g left join student s on g.id = s.gid 
+		where g.id=#{id,jdbcType=INTEGER} 
+	</select>
+</mapper>
